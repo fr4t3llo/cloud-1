@@ -1,8 +1,5 @@
 #!/bin/bash
 #env files
-DATABASE_USER=$MYSQL_USER
-DATABASE_NAME=$DB_NAME
-DATABASE_PASS=$MYSQL_PASSWORD
 
 # Wait for MySQL to start
 mkdir -p /run/php
@@ -17,18 +14,20 @@ rm -rf *
 wp core download --allow-root
 cp wp-config-sample.php wp-config.php
 wp config set DB_HOST mariadb --type=constant --allow-root
-sed -i "68s/.*/define('WP_REDIS_HOST', 'redis');/" /var/www/html/wp-config.php
-sed -i "70s/.*/define('WP_REDIS_PORT', 6379);/" /var/www/html/wp-config.php
-sed -i "71s/.*/define('WP_CACHE', true);/" /var/www/html/wp-config.php
+# sed -i "68s/.*/define('WP_REDIS_HOST', 'redis');/" /var/www/html/wp-config.php
+# sed -i "70s/.*/define('WP_REDIS_PORT', 6379);/" /var/www/html/wp-config.php
+# sed -i "71s/.*/define('WP_CACHE', true);/" /var/www/html/wp-config.php
 
 sed -i -e "s/database_name_here/${DB_NAME}/g" /var/www/html/wp-config.php
 sed -i -e "s/username_here/${MYSQL_USER}/g" /var/www/html/wp-config.php
 # sed -i -e "s/localhost/mariadb/g" /var/www/html/wp-config.php
 sed -i -e "s/password_here/${MYSQL_PASSWORD}/g" /var/www/html/wp-config.php
-wp core install --url=https://${DOMAIN_NAME} --title="My Own Website" --admin_user=${MYSQL_USER} --admin_password=${MYSQL_PASSWORD} --admin_email=saife.addine123@gmail.com --allow-root
+wp core install --url=https://${DOMAIN_NAME} --title="My Own Website" --admin_user=${MYSQL_USER} --admin_password=${MYSQL_PASSWORD} --admin_email=saif.saif@gmail.com --allow-root
 wp user create ${AUTHOR_USER} test@gmail.com --role=author --user_pass=${AUTHOR_PASS} --allow-root
-wp plugin install redis-cache --activate --allow-root
+# wp plugin install redis-cache --activate --allow-root
 wp plugin update --all --allow-root
-wp theme install twentytwentyone --activate --allow-root
-wp redis enable --allow-root
+# wp theme install twentytwentyone --activate --allow-root
+wp theme install twentytwentytwo --activate --allow-root
+
+# wp redis enable --allow-root
 /usr/sbin/php-fpm7.3 -F

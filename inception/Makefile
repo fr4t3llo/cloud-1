@@ -6,7 +6,7 @@
 #    By: skasmi <skasmi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/27 17:23:32 by skasmi            #+#    #+#              #
-#    Updated: 2023/03/09 15:51:36 by skasmi           ###   ########.fr        #
+#    Updated: 2025/05/27 21:33:33 by skasmi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,4 +25,5 @@ re:
 
 fclean:
 	docker system prune --all --force
+	docker rm -f $(docker ps -aq)
 	

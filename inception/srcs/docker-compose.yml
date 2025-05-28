@@ -41,80 +41,17 @@ services:
     # volumes:
     #   - vmd:/var/lib/mysql
   
-  adminer:
-    depends_on:
-      - mariadb
-    ports: 
-      - "1111:1111"
-    build: ./requirements/bonus/adminer/
-    image: adminer
-    container_name: adminer
-    restart: unless-stopped
-    networks:
-      - 13_network
-
-  static_website:
-    build : ./requirements/bonus/website/
-    image: mywebsite
-    ports:
-      - "1024:1024"
-    container_name: static_website
-    restart: unless-stopped
-    networks:
-      - 13_network
-  
-  redis:
-    build: ./requirements/bonus/redis
-    image: redis
-    restart: unless-stopped
-    container_name: redis
-    networks:
-      - 13_network
-  
-  cadvisor:
-    build: ./requirements/bonus/cadvisor
-    image: cadvisor
-    ports:
-      - "2020:2020"
-    restart: unless-stopped
-    container_name: cadvisor
-    networks:
-      - 13_network
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker:/var/lib/docker:ro
-
-  ftp:
-    build: ./requirements/bonus/ftp_server
-    restart: unless-stopped
-    container_name: ftp_server
-    image: ftp_server
-    ports:
-      - "21:21"
-      - "20:20"
-      - "40000-40005:40000-40005"
-    networks:
-      - 13_network
-    env_file:
-      - .env
-    depends_on:
-      - wordpress
-    volumes:
-      - vwp:/home/skasmi/
-
 volumes:
   vwp:
     driver_opts:
       type: none
       o: bind
-      device: /home/skasmi/data/wordpress
+      device: /home/root/inception/data/wordpress
   vmd:
     driver_opts:
       type: none
       o: bind
-      device: /home/skasmi/data/mariadb
+      device: /home/root/inception/data/mariadb
       
 networks:
   13_network:

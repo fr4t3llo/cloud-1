@@ -5,7 +5,7 @@ server {
     ssl_certificate_key /etc/nginx/skasmi.42.fr.key;
     ssl_protocols TLSv1.3;
 
-    server_name skasmi.42.fr;
+    server_name localhost;
     root /var/www/html;
     index index.php;
 

@@ -1,0 +1,36 @@
+                                  # ================================== #
+                                  # 2.COPY PROJECT - copy-project.yaml #
+                                  # ================================== #
+- hosts: all
+  become: yes
+  tasks:
+    - name: Create project directory
+      file:
+        path: /home/{{ ansible_user }}/inception
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Copy project files
+      copy:
+        src: ../inception/
+        dest: /home/{{ ansible_user }}/inception/
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Create data directories
+      file:
+        path: /home/{{ ansible_user }}/inception/data/{{ item }}
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+      loop:
+        - wordpress
+        - mariadb
+    
+    - name: Set DOMAIN_NAME in .env to the host's IP address
+      lineinfile:
+        path: /home/{{ ansible_user }}/inception/srcs/.env
+        regexp: '^DOMAIN_NAME='
+        line: "DOMAIN_NAME={{ ansible_host }}"

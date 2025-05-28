@@ -1,0 +1,7 @@
+              # ============================ #
+              #  MAIN PLAYBOOK - deploy.yaml #
+              # ============================ #
+---
+- import_playbook: playbooks/01-setup-docker.yaml
+- import_playbook: playbooks/02-prepare-project.yaml
+- import_playbook: playbooks/03-deploy-project.yaml

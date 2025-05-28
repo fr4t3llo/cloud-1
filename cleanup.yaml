@@ -1,0 +1,104 @@
+                                                  # ============================== #
+                                                  # CLEANUP PLAYBOOK - cleanup.yaml #
+                                                  # ============================== #
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Stop all Docker containers
+      shell: docker stop $(docker ps -aq)
+      ignore_errors: yes
+
+    - name: Remove all Docker containers
+      shell: docker rm $(docker ps -aq)
+      ignore_errors: yes
+
+    - name: Remove all Docker images
+      shell: docker rmi $(docker images -q) --force
+      ignore_errors: yes
+
+    - name: Remove all Docker volumes
+      shell: docker volume rm $(docker volume ls -q)
+      ignore_errors: yes
+
+    - name: Remove all Docker networks
+      shell: docker network rm $(docker network ls -q)
+      ignore_errors: yes
+
+    - name: Clean Docker system completely
+      shell: docker system prune -af --volumes
+      ignore_errors: yes
+
+    - name: Stop Docker service
+      service:
+        name: docker
+        state: stopped
+      ignore_errors: yes
+
+    - name: Remove Docker packages
+      apt:
+        name: 
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: absent
+        purge: yes
+      ignore_errors: yes
+
+    - name: Remove Docker Compose
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /usr/local/bin/docker-compose
+        - /usr/bin/docker-compose
+      ignore_errors: yes
+
+    - name: Remove Docker directories
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /var/lib/docker
+        - /var/lib/containerd
+        - /etc/docker
+        - /var/run/docker.sock
+      ignore_errors: yes
+
+    - name: Remove Docker repositories
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/apt/sources.list.d/docker.list
+        - /etc/apt/keyrings/docker.gpg
+        - /usr/share/keyrings/docker-archive-keyring.gpg
+      ignore_errors: yes
+
+    - name: Remove project directory
+      file:
+        path: /home/{{ ansible_user }}/inception
+        state: absent
+
+    - name: Remove user from docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        state: absent
+      ignore_errors: yes
+
+    - name: Clean apt cache and update
+      apt:
+        update_cache: yes
+        autoclean: yes
+        autoremove: yes
+
+    - name: Remove any Docker-related processes
+      shell: pkill -f docker
+      ignore_errors: yes
+
+    - name: Display cleanup completion
+      debug:
+        msg: "🧹 Cleanup completed! Your droplet is now clean."

@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: no
+  tasks:
+    - name: Run make command
+      command: make
+      args:
+        chdir: /home/{{ ansible_user }}/inception
