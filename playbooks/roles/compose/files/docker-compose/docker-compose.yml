@@ -40,7 +40,7 @@ services:
     restart: unless-stopped
     # volumes:
     #   - vmd:/var/lib/mysql
-  
+
 volumes:
   vwp:
     driver_opts:
@@ -52,8 +52,7 @@ volumes:
       type: none
       o: bind
       device: /home/root/inception/data/db
-      
+
 networks:
   13_network:
-    driver : bridge
-
+    driver: bridge

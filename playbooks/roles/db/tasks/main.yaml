@@ -28,8 +28,8 @@
       regexp: '^DOMAIN_NAME='
       line: "DOMAIN_NAME={{ ansible_host }}"
 
-# - name: Build MariaDB Docker image
-#   command: docker build -t mariadb_image .
-#   args:
-#     chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/mariadb"
+- name: Build MariaDB Docker image
+  command: docker build -t mariadb_image .
+  args:
+    chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/mariadb"
   

@@ -13,6 +13,8 @@ cd /var/www/html
 rm -rf *
 wp core download --allow-root
 cp wp-config-sample.php wp-config.php
+
+sleep 30 
 wp config set DB_HOST mariadb --type=constant --allow-root
 # sed -i "68s/.*/define('WP_REDIS_HOST', 'redis');/" /var/www/html/wp-config.php
 # sed -i "70s/.*/define('WP_REDIS_PORT', 6379);/" /var/www/html/wp-config.php

@@ -15,3 +15,8 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: '0644'
+
+- name: Build inception
+  command: docker-compose up
+  args:
+    chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/docker-compose/"

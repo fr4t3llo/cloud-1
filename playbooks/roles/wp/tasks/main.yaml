@@ -15,7 +15,7 @@
     group: "{{ ansible_user }}"
     mode: '0644'
 
-# - name: Build wordpress Docker image
-#   command: docker build -t wordpress_image .
-#   args:
-#     chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/wordpress"
+- name: Build wordpress Docker image
+  command: docker build -t wordpress_image .
+  args:
+    chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/wordpress"

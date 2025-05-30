@@ -1,0 +1,12 @@
+# ================================== #
+# 1.        SITE - site.yml          #
+# ================================== #
+---
+- hosts: all
+  become: yes
+  roles:
+  - common
+  - db
+  - nginx
+  - wp
+  - compose

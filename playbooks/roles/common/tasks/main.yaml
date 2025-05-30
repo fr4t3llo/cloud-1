@@ -1,0 +1,86 @@
+---
+- name: Create service directories
+  file:
+    path: "/home/{{ ansible_user }}/inception/srcs/requirements/mariadb"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Create nginx directory
+  file:
+    path: /home/{{ ansible_user }}/inception/srcs/requirements/nginx
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Create nginx directory
+  file:
+    path: /home/{{ ansible_user }}/inception/srcs/requirements/wordpress
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Remove old Docker repositories
+  file:
+    path: /etc/apt/sources.list.d/docker.list
+    state: absent
+
+- name: Clean apt cache
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+
+- name: Install prerequisites
+  apt:
+    name: [ ca-certificates, make, gnupg, curl ]
+    state: present
+
+- name: Download and install Docker using official script
+  shell: |
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sh get-docker.sh
+    rm get-docker.sh
+  args:
+    creates: /usr/bin/docker
+
+- name: Start Docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Add user to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+
+- name: Install Docker Compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/v2.21.0/docker-compose-linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: '0755'
+
+- name: Create mariadb directory
+  file:
+    path: /home/{{ ansible_user }}/inception/data/db
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Create wordpress directory
+  file:
+    path: /home/{{ ansible_user }}/inception/data/wp
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+
+
+
+
