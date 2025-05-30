@@ -1,0 +1,35 @@
+---
+- name: Create MariaDB directory
+  file:
+    path: "/home/{{ ansible_user }}/inception/srcs/requirements/mariadb"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Copy MariaDB files to target
+  copy:
+    src: mariadb/
+    dest: "/home/{{ ansible_user }}/inception/srcs/requirements/mariadb/"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+
+- name: copy .env in machine
+  copy:
+      src: "../inception/srcs/.env"
+      dest: "/home/{{ ansible_user }}/inception/srcs/requirements/.env"  
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+
+- name: Set DOMAIN_NAME in .env to the host's IP address
+  lineinfile:
+      path: /home/{{ ansible_user }}/inception/srcs/requirements/.env
+      regexp: '^DOMAIN_NAME='
+      line: "DOMAIN_NAME={{ ansible_host }}"
+
+# - name: Build MariaDB Docker image
+#   command: docker build -t mariadb_image .
+#   args:
+#     chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/mariadb"
+  

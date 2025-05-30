@@ -1,0 +1,21 @@
+---
+- name: Create wordpress directory
+  file:
+    path: "/home/{{ ansible_user }}/inception/srcs/requirements/wordpress"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Copy wordpress files to target
+  copy:
+    src: wordpress/
+    dest: "/home/{{ ansible_user }}/inception/srcs/requirements/wordpress/"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+
+# - name: Build wordpress Docker image
+#   command: docker build -t wordpress_image .
+#   args:
+#     chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/wordpress"

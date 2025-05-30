@@ -1,8 +1,8 @@
 version: "3.5"
 services:
   nginx:
-    build: ./requirements/nginx/
-    image: nginx
+    # build: ./requirements/nginx/
+    image: nginx_image
     ports:
       - "443:443"
     depends_on:
@@ -17,12 +17,12 @@ services:
       - 13_network
 
   wordpress:
-    build: ./requirements/wordpress/
+    # build: ./requirements/wordpress/
     depends_on:
       - mariadb
-    image: wordpress
+    image: wordpress_image
     container_name: wordpress
-    env_file: ./.env
+    env_file: ../.env
     restart: unless-stopped
     networks:
       - 13_network
@@ -30,10 +30,10 @@ services:
       - vwp:/var/www/html
 
   mariadb:
-    build: ./requirements/mariadb/
-    image: mariadb
+    # build: ./requirements/mariadb/
+    image: mariadb_image
     env_file:
-      - ./.env
+      - ../.env
     networks:
       - 13_network
     container_name: mariadb
@@ -46,12 +46,12 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/root/inception/data/wordpress
+      device: /home/root/inception/data/wp
   vmd:
     driver_opts:
       type: none
       o: bind
-      device: /home/root/inception/data/mariadb
+      device: /home/root/inception/data/db
       
 networks:
   13_network:

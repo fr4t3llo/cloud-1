@@ -1,0 +1,17 @@
+---
+
+- name: Create docker-compose directory
+  file:
+    path: "/home/{{ ansible_user }}/inception/srcs/requirements/docker-compose/"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Copy docker-compose to target
+  copy:
+    src: docker-compose/
+    dest: "/home/{{ ansible_user }}/inception/srcs/requirements/docker-compose/"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'

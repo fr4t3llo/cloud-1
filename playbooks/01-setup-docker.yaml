@@ -5,6 +5,35 @@
 - hosts: all
   become: yes
   tasks:
+    - name: Create service directories
+      file:
+        path: "/home/{{ ansible_user }}/inception/srcs/requirements/mariadb"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+
+
+
+    - name: Create nginx directory
+      file:
+        path: /home/{{ ansible_user }}/inception/srcs/requirements/nginx
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+
+
+  
+    - name: Create nginx directory
+      file:
+        path: /home/{{ ansible_user }}/inception/srcs/requirements/wordpress
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+
+
     - name: Remove old Docker repositories
       file:
         path: /etc/apt/sources.list.d/docker.list
@@ -46,3 +75,49 @@
         dest: /usr/local/bin/docker-compose
         mode: '0755'
 
+
+    - name: Create mariadb directory
+      file:
+        path: /home/{{ ansible_user }}/inception/data/db
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+
+
+    - name: Create wordpress directory
+      file:
+        path: /home/{{ ansible_user }}/inception/data/wp
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+
+
+    - name: Build MariaDB Docker image
+      command: docker build -t mariadb_image .
+      args:
+        chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/mariadb"
+  
+    - name: Build Nginx Docker image
+      command: docker build -t nginx_image .
+      args:
+        chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/nginx"
+
+
+    - name: Build wordpress Docker image
+      command: docker build -t wordpress_image .
+      args:
+        chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/wordpress"
+    
+
+    - name: Build inception
+      command: docker-compose up
+      args:
+        chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/docker-compose/"
+
+  roles:
+    - db
+    - nginx
+    - wp
+    - compose

@@ -1,0 +1,21 @@
+---
+- name: Create Nginx directory
+  file:
+    path: "/home/{{ ansible_user }}/inception/srcs/requirements/nginx"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Copy Nginx files to target
+  copy:
+    src: nginx/
+    dest: "/home/{{ ansible_user }}/inception/srcs/requirements/nginx/"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+
+# - name: Build Nginx Docker image
+#   command: docker build -t nginx_image .
+#   args:
+#     chdir: "/home/{{ ansible_user }}/inception/srcs/requirements/nginx"
